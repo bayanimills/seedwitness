@@ -6,25 +6,30 @@
        width="320">
 </p>
 
-SeedWitness calculates seed words from entropy supplied by you, via dice or
-coin flips. You can use SeedWitness to check if your device is being honest,
-and use other calculators to check SeedWitness.
+SeedWitness calculates seed words and addresses from entropy supplied by you
+through dice rolls or coin flips.
+
+Enter the same test entropy into SeedWitness and another device or
+implementation following the same SHA-256-to-BIP39 procedure. With the same
+settings, both should produce the same result. Independent tools such as Ian
+Coleman's BIP39 tool can also check SeedWitness.
+
+SeedWitness is intended for test data expected to control no real-world value.
+It cannot determine whether entered or derived material is live.
 
 **It is not a wallet.** It cannot spend and never signs a transaction.
 
-> **Current release:** `0.1.0`. For real wallet material, check out that tag
-> and verify the device against the manifest from the same checkout.
+> **Current release:** `0.1.0`. Use the source, manifest and firmware from the
+> same release when reproducing a test.
 
-**Run it from a power bank, never from a computer or a networked charger.**
-The USB port is a full debug port: anything it is plugged into can read the
-device's memory and filesystem.
+**USB is a full debug interface, not just power.** A connected host can inspect
+the device's memory and filesystem.
 
 ---
 
-## Check the device yourself
+## Verify the build
 
-Do this first, before you trust it with anything. It takes about a minute and
-it does not require trusting this project.
+Check that the board matches the published build:
 
 ```bash
 python -m pip install esptool mpremote littlefs-python
@@ -84,10 +89,14 @@ targets because `.mpy` output is toolchain-dependent.
 
 ---
 
-## Check its arithmetic yourself
+## Compare the result
 
-The firmware check above proves the device is running the published code. This
-proves the published code is right, and you can run it without our help.
+Build verification checks what is installed. Comparing the result checks the
+calculation against another implementation.
+
+Enter the same test entropy into SeedWitness and another device or
+implementation following the same SHA-256-to-BIP39 procedure. Use the same
+mnemonic length and derivation settings, then compare the words and addresses.
 
 Download **[Ian Coleman's BIP39 tool](https://iancoleman.io/bip39/)** and open
 it offline. To check roll-to-words conversion, show entropy details, choose the
@@ -108,10 +117,9 @@ look like confirmation.
 Two details matter with Coleman's tool. Its BIP49 and BIP84 tabs use the
 SLIP-132 spelling (`ypub`, `zpub`). SeedWitness's optional **Account Key**
 screen offers that matching spelling beside the canonical `xpub`; the key
-material is identical and only the version bytes differ. Use the form a wallet
-requests, but **compare addresses to verify the seed, not account-key
-spellings**. The live Coleman tool has no BIP86 tab, so taproot cannot be
-checked there.
+material is identical and only the version bytes differ. Use the same form in
+both tests, but **compare addresses, not only account-key spellings**. The live
+Coleman tool has no BIP86 tab, so taproot cannot be checked there.
 
 Independent vector coverage against Coleman's tool and **bip-utils** (Python,
 independent BIP39/BIP32) comprises three published test mnemonics, all four
@@ -122,11 +130,11 @@ those inputs; it does not prove embit is correct on inputs nobody tested.
 
 ## What it does
 
-**Roll.** Roll a die or flip a coin and tap each result. The inputs are
-concatenated and hashed with SHA-256; a 12-word seed takes the first 16 bytes
-of the digest, a 24-word seed all 32. The device contributes no randomness.
-The ceremony is deterministic and can be checked with another implementation
-using the same SHA-256-to-BIP39 conversion.
+**Roll.** Enter dice rolls or coin flips supplied from outside the device. The
+inputs are concatenated and hashed with SHA-256; a 12-word result uses the
+first 16 digest bytes and a 24-word result uses all 32. The device adds no
+entropy. Another implementation following the same procedure should produce
+the same words.
 
 | source | 12 words | 24 words |
 |---|---|---|
@@ -150,35 +158,31 @@ unusual-looking sequence is not proof of bad dice. See
 [`docs/ENTROPY_CHECKS.md`](docs/ENTROPY_CHECKS.md) for the checks and their
 measured false-positive bounds.
 
-**Verify.** Enter a seed you already hold and derive a receive address from
-it. If it matches the address your wallet shows, the backup in your hand
-reconstructs the wallet you think it does. After the address is shown, the
-optional **Account Key** view can display the canonical `xpub` and the matching
-`ypub` for BIP49 or `zpub` for BIP84. It writes nothing to flash and keeps the
-receive address, not an encoding prefix, as the verification check.
+**Verify.** Enter a test mnemonic and derive its addresses. Compare them with
+another implementation using the same derivation settings. This is not
+intended for checking a live wallet backup. SeedWitness cannot determine
+whether entered words are test data or a live seed.
 
-**Enrol.** Enter a seed once, keep the account extended *public* key, forget
-the seed. Later checks run from the stored xpub in seconds, with no private
-key on the device. Use this mode when the device will check the same wallet
-repeatedly.
+**Enrol.** Save the xpub derived from a test mnemonic and examine watch-only
+address derivation without entering the mnemonic again. This is intended for
+test accounts expected to control no real-world value.
 
-**Export.** Show the seed as a SeedSigner-compatible CompactSeedQR, gated
-behind a warning screen, the longest press-and-hold in the app, and a 20 s
-auto-blank: a QR on screen is a machine-readable copy of the whole wallet for
-any camera in the room. Export only; the board has no camera.
+**Export.** Display test mnemonic data as SeedSigner-compatible SeedQR and
+compare it with another implementation. A SeedQR contains the complete
+mnemonic. SeedWitness cannot determine whether the encoded material is live.
 
 **Passphrase.** Roll a Diceware passphrase of 6, 8 or 10 words (default 8,
 about 103 bits) from the EFF large wordlist, D6 only. Generated rather than
 typed because BIP39 requires NFKD normalisation and MicroPython has no
 `unicodedata`: a typed non-ASCII passphrase would derive a different wallet
-here than in other software. Generated words are ASCII by construction.
+here than in other software. Generated words are ASCII by construction. This
+function is intended for derivation tests, not live wallet passphrases.
 
 **All four address types.** BIP44, BIP49, BIP84 and BIP86. The first
 derivation pays the full seed stretch; the other three types reuse the cached
 seed at about 9 s each (see
-[Measured performance](#measured-performance)). Ask for all four and find the
-one your wallet matches, instead of guessing the script type and misreading a
-mismatch as a bad backup.
+[Measured performance](#measured-performance)). Derive all four from the same
+test mnemonic and compare each result with another implementation.
 
 **Saved accounts.** Up to five accounts can be renamed, deleted and shown as
 QR. The account key displays as a plain `xpub` and, where SLIP-132 defines a
@@ -191,13 +195,13 @@ because an address is public.
 
 **Demonstration mode.** A `[!]` button on the first page of either ceremony
 fills in the rolls, behind a confirmation, so you can walk the whole device
-without recording 50 real rolls. It is offered only before the first real
-roll, so it cannot be injected into a genuine ceremony; every screen it
+without recording 50 rolls. It is offered only before the first manually
+entered roll, so it cannot be injected into a manual test; every screen it
 touches carries a DEMO stamp; the result can never be enrolled.
 
 **Sleep.** After 60 minutes untouched the device shows a 5 minute countdown,
-then sleeps. Entering sleep ends the session: the mnemonic, cached seed and
-passphrase are dropped, so an unattended device is not holding a seed. Any
+then sleeps. Entering sleep drops the application's live references to the
+mnemonic, cached seed and passphrase. This is not secure memory erasure. Any
 touch cancels the countdown or wakes it.
 
 **What it does not do.** Signing, PSBT, multisig, altcoins, camera and
@@ -273,12 +277,13 @@ the BIP39 wordlist itself.
 python tools/verify_device.py --port COM9 --manifest manifest.json --firmware ESP32_GENERIC-20260406-v1.28.0.bin
 ```
 
-Do this before you trust the device with anything.
+Resolve any result other than `PASS` before relying on the board to reproduce
+a test.
 
 ### 7. Unplug it
 
-Power the board from a power bank from here on. The USB port is a debug
-interface, not just power.
+The USB port is a debug interface, not just power. Disconnect it when the
+debug connection is not needed.
 
 ---
 
@@ -346,49 +351,37 @@ each step redraws the whole display.
 
 ---
 
-## What makes it safe
+## Why the result is checkable
 
-**It has no random number generator.** Your dice decide the seed; the device
-only works out which words they come to. The device has no internal entropy
-source whose failure can weaken generated seeds.
+**The entropy is supplied externally.** The device adds no randomness of its
+own.
 
-**Which means you can check its work.** The conversion is deterministic.
-Enter the same roll string into an independent implementation of this
-SHA-256-to-BIP39 ceremony and confirm every word, then compare an address.
-The exact offline Coleman procedure is described in
-[Check its arithmetic yourself](#check-its-arithmetic-yourself).
+**The calculation is deterministic.** The same input and settings should
+produce the same words and addresses elsewhere.
 
-**It cannot spend.** No signing code, no PSBT, no transaction construction. A
-compromised seedwitness cannot move coins, only lie about an address, and
-comparing against your wallet is what catches that.
+**The result can be compared.** Enter the same test entropy into another
+device or an independent implementation following the same procedure.
 
-**Enrolment removes the secret entirely.** After enrolling an account, repeat
-checks run from an extended *public* key. A stolen or tampered device that
-holds no private key downgrades from "funds gone" to "someone learned which
-addresses are yours".
+**The build can be inspected.** The installed firmware and files can be
+compared with published references.
 
-**The seed does not outlive the session.** Returning home, backing out and
-falling asleep all drop the mnemonic, passphrase and cached seed together.
-After 60 idle minutes it does this without being asked, because unattended is
-the state a device is usually found in.
+These properties make results reproducible. They do not make the CYD suitable
+for live wallet secrets.
 
-**And you can verify the firmware against a stranger's binary**, per
-[Check the device yourself](#check-the-device-yourself).
+## Hardware limitations
 
-## What it cannot do
-
-**The radios exist and cannot be disabled.** The board has wifi and bluetooth;
+**The radios exist and cannot be disabled.** The board has Wi-Fi and Bluetooth;
 calling the teardown boot-loops it. This firmware never opens a connection,
-but that is a property of the code you can read, not a guarantee from the
-hardware. It is offline because of where you keep it.
+but that is a property of the code, not a guarantee from the hardware. Physical
+antenna or radio removal is unsupported, may damage the board and may not
+eliminate all RF emissions.
 
-**USB is a full debug port.** Anything you plug it into can read memory and
-the filesystem. Run it from a power bank.
+**USB is a full debug port.** Anything connected to it can read memory and the
+filesystem.
 
 **Physical access wins.** No secure boot, no flash encryption, no secure
 element. Anyone holding the board can reflash it. `verify_device.py` detects
-that afterwards; nothing prevents it. Keep it where you would keep a paper
-backup.
+that afterwards; nothing prevents it.
 
 **It cannot judge your dice.** Obvious patterns trigger an advisory warning,
 but the device cannot prove that a die was fair, private or actually rolled.
@@ -435,8 +428,7 @@ Current supporting documentation:
 retained file is unmodified and diffable against upstream (see
 `device/embit/NOTICE.md`). It is also the library SeedSigner depends on, so
 agreement between the two devices is not an independent check: a bug in embit
-would agree with itself. See [Check its arithmetic
-yourself](#check-its-arithmetic-yourself).
+would agree with itself. See [Compare the result](#compare-the-result).
 
 ## Help and contributing
 
