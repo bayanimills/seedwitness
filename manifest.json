@@ -1,0 +1,671 @@
+{
+  "schema": "seedwitness-manifest/1",
+  "deploy": {
+    "note": "files as they land on the board, paths relative to /",
+    "digest": "f60055efb7a0b24cc4804a75745abd6ea25f7cbe0e8f796521c643e3826b2d6a",
+    "files": [
+      {
+        "path": "bip39_words.bin",
+        "size": 16384,
+        "sha256": "4c24816acbe9dc4bfd96c1b7aeb2e31ace2912a2cea1b5db91c3ee562aaa6a38"
+      },
+      {
+        "path": "boot.py",
+        "size": 139,
+        "sha256": "16f5b4bcb120e9a032242b47967e649a0cc577b41939e81ef7d4b4da181bd17f"
+      },
+      {
+        "path": "eff_words.bin",
+        "size": 77760,
+        "sha256": "d4f3d33c57bd2998ccb8b580c398659aa694abc7553a2b07aee8f9dc615179f7"
+      },
+      {
+        "path": "embit/__init__.mpy",
+        "size": 34,
+        "sha256": "703b4a581cb35c631f71443da04a5932e823a31c9b2bcfb0ca17f6348671193b"
+      },
+      {
+        "path": "embit/base.mpy",
+        "size": 1339,
+        "sha256": "e634af997c36eddf938a26e5ecde99cb17422729dbd6ad15f5b4c53b36fbb04b"
+      },
+      {
+        "path": "embit/base58.mpy",
+        "size": 763,
+        "sha256": "cb419cdee7ac1c65fc456b147586de51e056aa96e32163d6fac719782a6aa7c6"
+      },
+      {
+        "path": "embit/bech32.mpy",
+        "size": 1584,
+        "sha256": "a0cd515b18fb9a34a306fd1e9122f7917c859c7fa1b04fa5940cf98795d86b97"
+      },
+      {
+        "path": "embit/bip32.mpy",
+        "size": 3845,
+        "sha256": "4f8ec0d207411782647ea0af645af368d377fb6dbb7a01e6101c3ed69aa5f55c"
+      },
+      {
+        "path": "embit/bip39.mpy",
+        "size": 1350,
+        "sha256": "89a452bf8586b430a30f379845ae1e9bfafbda8e4bd66fd2502e1eeda96235cd"
+      },
+      {
+        "path": "embit/compact.mpy",
+        "size": 533,
+        "sha256": "f75a2d2f2e72d87571542d71dc4921a3c2cbd45fb5ee1426769ea011f105fb12"
+      },
+      {
+        "path": "embit/ec.mpy",
+        "size": 3375,
+        "sha256": "ac5d1c29eba38de371d1a51a07501f0b2f96e6959b478019c1ef2b891c96473b"
+      },
+      {
+        "path": "embit/hashes.mpy",
+        "size": 439,
+        "sha256": "3bdded23de04620636f3f4df55af08b327b48b6abc511b74b6da3431bdbe7c29"
+      },
+      {
+        "path": "embit/misc.mpy",
+        "size": 641,
+        "sha256": "5ae96cd8b88b641f474a6ad68e0b3dcf80c094ebb98cefde76115b5244e6f7ea"
+      },
+      {
+        "path": "embit/networks.mpy",
+        "size": 828,
+        "sha256": "2f41ff181127a1e3e861149fa7c39158f1a031a5c662bf40b507b95ccabca008"
+      },
+      {
+        "path": "embit/script.mpy",
+        "size": 2587,
+        "sha256": "895ac43e72c2d66f2aae17ea36a099aa998e1b404903c5bf3b777e8f319e2b4e"
+      },
+      {
+        "path": "embit/util/__init__.mpy",
+        "size": 118,
+        "sha256": "74fa760e9c289810d27b9339af8ab29af8a4517192262b03f5854b162ee603d2"
+      },
+      {
+        "path": "embit/util/key.mpy",
+        "size": 5849,
+        "sha256": "2aebdc3486557fe96aec4376107ce4e24ed41c10e4bf1f0fff2d91f976794243"
+      },
+      {
+        "path": "embit/util/py_ripemd160.mpy",
+        "size": 1429,
+        "sha256": "250ea357f7f053647bf51c4f29e7ac4d7868d845da2e0298b6d86838d0ae1ba9"
+      },
+      {
+        "path": "embit/util/py_secp256k1.mpy",
+        "size": 5066,
+        "sha256": "fff30d71032452a3bdd16128936657dc9053dc0d81dd9d0568598d02e3f62a7f"
+      },
+      {
+        "path": "embit/util/secp256k1.mpy",
+        "size": 2228,
+        "sha256": "700b6bf8881e9e5b3f11c8a0c0666d1d8e9e23390b22bb77477606842fd63b03"
+      },
+      {
+        "path": "embit/wordlists/__init__.mpy",
+        "size": 44,
+        "sha256": "4b1e1d10ec07c6b24272a2514012196d0f7d13c2e319b97fd44358dbf4c94561"
+      },
+      {
+        "path": "embit/wordlists/base.mpy",
+        "size": 446,
+        "sha256": "89b150ea081aae47b28380b8096cf5d95a958c6b0f228ed09ca141a22731bfab"
+      },
+      {
+        "path": "embit/wordlists/bip39.mpy",
+        "size": 154,
+        "sha256": "2b7ef1284158fb13c98f6bf503aec5928423bb1ac91e1673c2c2db22ca69a541"
+      },
+      {
+        "path": "flash_fonts.mpy",
+        "size": 616,
+        "sha256": "231a97d86b333cfcdcbba7931b20e1759216ac423cd80823c905740250db118f"
+      },
+      {
+        "path": "flash_wordlist.mpy",
+        "size": 406,
+        "sha256": "7af2ec30dfe4af4a4c75bd5c4aaee6026767117dcb6374856eba3470b737f139"
+      },
+      {
+        "path": "fonts.bin",
+        "size": 8825,
+        "sha256": "eb2c3309cbf14cd493b5a5d39e87c80c8c2526b08eac89255a39d60a93c7db1b"
+      },
+      {
+        "path": "hashlib/__init__.mpy",
+        "size": 300,
+        "sha256": "7c1d31583a6c3ed4fdd8fbd0614a81266070d29a0f9f8243284503ef11c0a5b7"
+      },
+      {
+        "path": "hashlib/_sha.mpy",
+        "size": 535,
+        "sha256": "546124f2b676b44e6c34543687501dde7246e84a6224b62149340b3ea28fc18a"
+      },
+      {
+        "path": "hashlib/_sha512.mpy",
+        "size": 6958,
+        "sha256": "193346770abb927959710150d3b1ad6993fd0c0edf5423a8e577235962370658"
+      },
+      {
+        "path": "hmac.mpy",
+        "size": 928,
+        "sha256": "07ae949f7800000f4a4b1ec426e26d436af78d9c997af48c5a69c07ebaad5c78"
+      },
+      {
+        "path": "main.py",
+        "size": 6358,
+        "sha256": "386bc075e431f33a863a33ceb948d3d8316f3414d9715f02f9a30498c447ca53"
+      },
+      {
+        "path": "pbkdf2.mpy",
+        "size": 796,
+        "sha256": "14260a51381b4cf112bb9faa33c138ccc80790c150bf3dc72d20b2ea870223f8"
+      },
+      {
+        "path": "secp256k1.mpy",
+        "size": 306,
+        "sha256": "77d00d9aeb90cd647320a3c155ff1d930b352d52178daff59170e35620358c00"
+      },
+      {
+        "path": "seedwitness/__init__.mpy",
+        "size": 62,
+        "sha256": "56a07f09d2553a7b21d4ebec8d3dfb418c9f578d6cfdd8f518308658738c3b3a"
+      },
+      {
+        "path": "seedwitness/accounts.mpy",
+        "size": 1120,
+        "sha256": "e5878cd34f7303e8c59c8594e09cab18702f82c692e7f61ac963549a8516d2e6"
+      },
+      {
+        "path": "seedwitness/attest.mpy",
+        "size": 1218,
+        "sha256": "11132741c44ee83a0d913dbc0221759da3b6b0e3d03968319893fcb246a56404"
+      },
+      {
+        "path": "seedwitness/compat.mpy",
+        "size": 145,
+        "sha256": "7ede3764a5bf3c81c2428f839b43c1acc20fc61ff23d2197f18f4062e8d9921f"
+      },
+      {
+        "path": "seedwitness/derive.mpy",
+        "size": 1797,
+        "sha256": "f0e893d2bedd41456237392a4b7fe248d8881ce919a5ed1d87089005d8297a85"
+      },
+      {
+        "path": "seedwitness/diag.mpy",
+        "size": 2735,
+        "sha256": "ad2baa86d40ccbfc1498a1e43fa58452a0e1b65193cf4cf45b27c035d2d94100"
+      },
+      {
+        "path": "seedwitness/drivers/__init__.mpy",
+        "size": 48,
+        "sha256": "a11eb5d20c8af0ad9f7ee61c3448a896eaa790fc0dd1901650d7c15628e862f2"
+      },
+      {
+        "path": "seedwitness/drivers/cyd.mpy",
+        "size": 973,
+        "sha256": "e6db100cffed49a7396ef07e72f0c700e11a14c66e9246ffa5420867e759498a"
+      },
+      {
+        "path": "seedwitness/drivers/ili9341.mpy",
+        "size": 8946,
+        "sha256": "47709b105a705442f2ce71cd686917e648be208ab22da46afea26c8061ce518f"
+      },
+      {
+        "path": "seedwitness/drivers/xpt2046.mpy",
+        "size": 1431,
+        "sha256": "fc3b675b8714de1cf9a8a65c51cf08fd8e34d455ce54541ffa2135cec49a3193"
+      },
+      {
+        "path": "seedwitness/entropy.mpy",
+        "size": 4552,
+        "sha256": "0c8b866e0d056e47accab034a6741915e3d3b235c40a79e5012eae9e97bf4621"
+      },
+      {
+        "path": "seedwitness/mnemonic.mpy",
+        "size": 1326,
+        "sha256": "135664ddbf22b7de953a6d2e32fe8486903af67d4c15edf9402dc0f5a833e2d1"
+      },
+      {
+        "path": "seedwitness/passphrase.mpy",
+        "size": 1096,
+        "sha256": "bc34aa58049eb299600c547096feafecaf58e8769dcdea4e9a96482dc495fcf8"
+      },
+      {
+        "path": "seedwitness/qr.mpy",
+        "size": 4588,
+        "sha256": "c89a78ef29e79cb3cf387a2404eb2d0eb4b7d790e0bd89516c6b29937e7a2db0"
+      },
+      {
+        "path": "seedwitness/ui/__init__.mpy",
+        "size": 43,
+        "sha256": "aa40ab395d6d997600b0851b1b108753c5a771a0a92f99d37f653a10c709d4ad"
+      },
+      {
+        "path": "seedwitness/ui/app.mpy",
+        "size": 4886,
+        "sha256": "5332f7f17e2b5ad5c2a014b25c0f822d5f2360d359c29d74e5667416126f9c77"
+      },
+      {
+        "path": "seedwitness/ui/canvas.mpy",
+        "size": 2643,
+        "sha256": "b09499d51964763d4ed20945ff9760c0e91d1b64db72a07e6e2146aaf9b86f4d"
+      },
+      {
+        "path": "seedwitness/ui/flow_accounts.mpy",
+        "size": 5671,
+        "sha256": "7c4cde94e2d032ccfbc6586431351b5906f3b729546a3b93c11913252b5e9d5d"
+      },
+      {
+        "path": "seedwitness/ui/flow_address.mpy",
+        "size": 13660,
+        "sha256": "e27477d687b5c3c227c5f787359ca576714286ffb89e3f199e063c73e3dd4d97"
+      },
+      {
+        "path": "seedwitness/ui/flow_generate.mpy",
+        "size": 10238,
+        "sha256": "c5ae73f1b7ee439bd1adf0de195bbee6cbed5fc8f33b4a1186b06f9aba74b27b"
+      },
+      {
+        "path": "seedwitness/ui/flow_info.mpy",
+        "size": 5072,
+        "sha256": "2a28c94fcf8fffce923b1a0245b12da4a62b0f3debf4fc270855823cba7f5c5e"
+      },
+      {
+        "path": "seedwitness/ui/flow_verify.mpy",
+        "size": 4870,
+        "sha256": "451ef271c49e9b8a5e67435922cfac3e58f4a2157cd10de5ee9f3c004dc47358"
+      },
+      {
+        "path": "seedwitness/ui/fonts/__init__.mpy",
+        "size": 931,
+        "sha256": "f7b74ed94de4ff14cff1eab3dfba8ed5818da637b71a1757e0fe9049f97c0108"
+      },
+      {
+        "path": "seedwitness/ui/fonts/spleen_12x24.mpy",
+        "size": 151,
+        "sha256": "b387027cd4aa904b73500a1027810fed56c77e166d0a093f6906ecad868d7d2e"
+      },
+      {
+        "path": "seedwitness/ui/fonts/spleen_16x32.mpy",
+        "size": 151,
+        "sha256": "ba97b39c4d7404c783077da026a7abfd1c48352ccdc1531d8f9f6e8e26230e4f"
+      },
+      {
+        "path": "seedwitness/ui/fonts/spleen_8x16.mpy",
+        "size": 150,
+        "sha256": "a4e0c36fc2a50877f4b380a2c7806e6feb83b102d9370ceb5dbf979c05acf78f"
+      },
+      {
+        "path": "seedwitness/ui/screens.mpy",
+        "size": 8692,
+        "sha256": "3edf1f6d9a4be2934103be70dc91c7535c2f757e4049a19b82c4a84f0edbea81"
+      },
+      {
+        "path": "seedwitness/ui/theme.mpy",
+        "size": 875,
+        "sha256": "1b804d080d21f85fe40e3223b5706dd0371f0b226b66a09386a3bbbafdc43be8"
+      },
+      {
+        "path": "wordmark.bin",
+        "size": 1362,
+        "sha256": "7947c862a75fff6c34fa503f31b6d54427c438a5d0e70e1ee5d7d622a1d691f8"
+      }
+    ]
+  },
+  "source": {
+    "note": "inputs that determine the deploy tree, paths from repo root",
+    "roots": [
+      "device",
+      "tools/build_mpy.sh"
+    ],
+    "digest": "b3b737d1a72660961734524b471d58cec70b187dc64509999714b30675d9c2a5",
+    "files": [
+      {
+        "path": "device/data/eff_large_wordlist.txt",
+        "size": 62144,
+        "sha256": "6d557f0693958fb5e650b68b5bee585eb82cf4da32965505c789e924743bc522"
+      },
+      {
+        "path": "device/data/wordmark.txt",
+        "size": 11294,
+        "sha256": "da2849bc14645d0034108d647d7b76138989d7c6e12b44d153dbd67fb73aadcb"
+      },
+      {
+        "path": "device/embit/NOTICE.md",
+        "size": 2612,
+        "sha256": "db265ac98be498cd020b3e5d9cf90e3057d3e42d5a176b9e884ce6ed657cee55"
+      },
+      {
+        "path": "device/embit/__init__.py",
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "device/embit/base.py",
+        "size": 3472,
+        "sha256": "7c0b75fa140abce6663fc879f811c69bc231099b962f968ed362ac1bfbe10461"
+      },
+      {
+        "path": "device/embit/base58.py",
+        "size": 1978,
+        "sha256": "9166fd6cec484bf1c14a4ca1dabc05a9cff1613a35598737945da0b5dec81d5f"
+      },
+      {
+        "path": "device/embit/bech32.py",
+        "size": 5165,
+        "sha256": "9ad80ea66ef64f7e2c8906175fdd5bc3ba19952fea6a356edd15cf693736ba3f"
+      },
+      {
+        "path": "device/embit/bip32.py",
+        "size": 10157,
+        "sha256": "44cbc51b66db1ee9651545d899da381b11da778c5c8f63f03de03bc1075726bf"
+      },
+      {
+        "path": "device/embit/bip39.py",
+        "size": 4140,
+        "sha256": "630534f8fb4a6559eb8492c124f581a8530dae40137cd53ec74047e192a83429"
+      },
+      {
+        "path": "device/embit/compact.py",
+        "size": 1135,
+        "sha256": "558255ead2d0c05c8c2241de6906717cee946a31ee35a1c8d99d4a3e1bb50cd8"
+      },
+      {
+        "path": "device/embit/ec.py",
+        "size": 8332,
+        "sha256": "1c2b11a8e397a903473962ff0baa2b3de02e81c211b6df300fe828f1249a533b"
+      },
+      {
+        "path": "device/embit/hashes.py",
+        "size": 1222,
+        "sha256": "a0fbfa6dfd9c2db718a706e20b09bbf29d0ff120d8381f2db0477f8f169b9505"
+      },
+      {
+        "path": "device/embit/misc.py",
+        "size": 1820,
+        "sha256": "fc544d7dcb476386b4a2c1b47ea6c6da553e3471d916e8b2c24ea6328769ef9d"
+      },
+      {
+        "path": "device/embit/networks.py",
+        "size": 2256,
+        "sha256": "d1ba1531c9bb5fb67e838b092a2f30153a8a3b135c61c4819ab20ea1339bd94b"
+      },
+      {
+        "path": "device/embit/script.py",
+        "size": 6354,
+        "sha256": "f35827d59a038ba9b0d11ab80697ae3f5913f6bf16d7c078b627180f5ef651e3"
+      },
+      {
+        "path": "device/embit/util/__init__.py",
+        "size": 96,
+        "sha256": "23cccc8f03e645102b5d2722758ac955edda2a2b14b7d24eec17a28b71595c79"
+      },
+      {
+        "path": "device/embit/util/ctypes_secp256k1.py",
+        "size": 39495,
+        "sha256": "76695a82303a769942a1d9edab23aaa9380af577ebae6ddf2eae04acc6b5d43b"
+      },
+      {
+        "path": "device/embit/util/key.py",
+        "size": 20166,
+        "sha256": "0850b1637dafc13c7c2e0d1e4afbbcbc655890dc142da543c340ac8e494a5dd9"
+      },
+      {
+        "path": "device/embit/util/py_ripemd160.py",
+        "size": 5397,
+        "sha256": "44d730f6ced0ee5d4ffaa9662420779f8797bf5ba3a1927dd11b6af2639a08d3"
+      },
+      {
+        "path": "device/embit/util/py_secp256k1.py",
+        "size": 13341,
+        "sha256": "cd71a7d933635ba82eea52e9af59854ab03392e9eb866ff1072f581c3de716ba"
+      },
+      {
+        "path": "device/embit/util/secp256k1.py",
+        "size": 3751,
+        "sha256": "3f0dfccabac80a6c83c0d2318582d296d0fa9cf88ab347418ba7e27af5e333c6"
+      },
+      {
+        "path": "device/embit/wordlists/__init__.py",
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "device/embit/wordlists/base.py",
+        "size": 897,
+        "sha256": "c4e144c64cbc7e46e8c9e66ad625cc4e2a04f3a13d71ae2c197413973e79ace1"
+      },
+      {
+        "path": "device/embit/wordlists/bip39.py",
+        "size": 27467,
+        "sha256": "c7398e797b743901822741e5a2c6010cb1ac09f7ea1bc562d6da0d8bf4d164e2"
+      },
+      {
+        "path": "device/embit/wordlists/ubip39.py",
+        "size": 124,
+        "sha256": "5bb74513560d9643773b3e4c6016094414c2c6bbc7bfe97944e66dfbf27300be"
+      },
+      {
+        "path": "device/main.py",
+        "size": 6358,
+        "sha256": "386bc075e431f33a863a33ceb948d3d8316f3414d9715f02f9a30498c447ca53"
+      },
+      {
+        "path": "device/mp_shims/fonts_flash/flash_fonts.py",
+        "size": 4043,
+        "sha256": "957ed524a024905b5ee85261fe35b0a63081f1abb273948e6a826ab06e1b7eef"
+      },
+      {
+        "path": "device/mp_shims/fonts_flash/spleen_12x24.py",
+        "size": 400,
+        "sha256": "5a71d8a6cbec59d59c1ac8459681f6e80ffbf1252dc0620dee19a2a11809602e"
+      },
+      {
+        "path": "device/mp_shims/fonts_flash/spleen_16x32.py",
+        "size": 430,
+        "sha256": "ba9dcba9eed0d3e70820011492397c8b15af387cbab1b4b21a5262da0747499d"
+      },
+      {
+        "path": "device/mp_shims/fonts_flash/spleen_8x16.py",
+        "size": 516,
+        "sha256": "14fa067601730e816183119fbf5f97f0a2711eda18b00a77df9bcab7dd43325b"
+      },
+      {
+        "path": "device/mp_shims/hashlib/__init__.py",
+        "size": 1059,
+        "sha256": "94e0a76c0c6d01d20472dafd8f6c5ddda208512897ecf0189a04380fc8403d84"
+      },
+      {
+        "path": "device/mp_shims/hashlib/_sha.py",
+        "size": 1098,
+        "sha256": "cbd03c9340a1a1d6b0aee7af422e346716a876e8119244ac2e6dff21523db6ef"
+      },
+      {
+        "path": "device/mp_shims/hashlib/_sha512.py",
+        "size": 15779,
+        "sha256": "711d58d92d4fa2d34e255646b5913a30c1ef4da5504549151c4f7d7f793ec525"
+      },
+      {
+        "path": "device/mp_shims/hmac.py",
+        "size": 3631,
+        "sha256": "336a04fa4cac47f66ca44de630884298ed29a8b0432c8b195718f478974d8563"
+      },
+      {
+        "path": "device/mp_shims/pbkdf2.py",
+        "size": 4421,
+        "sha256": "8d3ce91b3c5c944e4986388a072ee34cb0f2dfcdc4bb6abfbe88882740b92d78"
+      },
+      {
+        "path": "device/mp_shims/secp256k1.py",
+        "size": 2205,
+        "sha256": "4c64832b7509387f70ed921bfba58468e59bfea9d852dcd82577026ef740f50f"
+      },
+      {
+        "path": "device/mp_shims/wordlist_flash/bip39.py",
+        "size": 601,
+        "sha256": "28c716a697b0bc990ffb54e43a2049e54321d79bbc2d9f2099873978f0b844ea"
+      },
+      {
+        "path": "device/mp_shims/wordlist_flash/flash_wordlist.py",
+        "size": 2494,
+        "sha256": "41c5d0e1b49de7c1c4b93bf9cd193ce8ec1aaadcf94ecfeb2bf1d2a7b2bc842e"
+      },
+      {
+        "path": "device/seedwitness/__init__.py",
+        "size": 89,
+        "sha256": "d691e754678c6af1a44c903ad4d37fd42303506cef83ffdf16ce934e86cd86db"
+      },
+      {
+        "path": "device/seedwitness/accounts.py",
+        "size": 7787,
+        "sha256": "d777e5cea7d86a5561c95d1e78326323f3abc6b22396e7d1cb5e38fa77b562ee"
+      },
+      {
+        "path": "device/seedwitness/attest.py",
+        "size": 5894,
+        "sha256": "438020c7eaaaf49e2ec665293c305cc985a20ac3c86e6c8ec8eb530086d1e3d4"
+      },
+      {
+        "path": "device/seedwitness/compat.py",
+        "size": 2183,
+        "sha256": "1ee504912b989b8f9ac369a8838fb6609a6d763c0de4ca70fc63e5acb00baabe"
+      },
+      {
+        "path": "device/seedwitness/derive.py",
+        "size": 11608,
+        "sha256": "eb3b3a941527ee5993b7d39f22421d16b141b7dd339764606b21fb3a57fbe032"
+      },
+      {
+        "path": "device/seedwitness/diag.py",
+        "size": 13026,
+        "sha256": "3f243039f320b953be66777474c7ab6f4d9f6bc8fdb2487ae5851bd90a7609cd"
+      },
+      {
+        "path": "device/seedwitness/drivers/__init__.py",
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "device/seedwitness/drivers/cyd.py",
+        "size": 10092,
+        "sha256": "fb8097ad3f1ba0cd6c49f920414c0077112046418b71a5143be375a192e78e61"
+      },
+      {
+        "path": "device/seedwitness/drivers/ili9341.py",
+        "size": 44407,
+        "sha256": "61b0f72bae66a06eb7125f870c8802c9869e648f8b7c3c2852c9f63de40b0bbc"
+      },
+      {
+        "path": "device/seedwitness/drivers/xpt2046.py",
+        "size": 5447,
+        "sha256": "66ea8056aa4f85615e061a426ae6f89413c4acb1bdc4baac4871e6ec39e39df1"
+      },
+      {
+        "path": "device/seedwitness/entropy.py",
+        "size": 22189,
+        "sha256": "f43eebdc858a0eb225276869b16609b65689356002da3b1cf15edafb7de13e55"
+      },
+      {
+        "path": "device/seedwitness/mnemonic.py",
+        "size": 6604,
+        "sha256": "e963651ff0398daff61ab745b88816975814134831d565079af4e22e4662f7a1"
+      },
+      {
+        "path": "device/seedwitness/passphrase.py",
+        "size": 6183,
+        "sha256": "18c58544f719bec96530452aeaca950541bb3282f7d6f63907a66b207ab801d8"
+      },
+      {
+        "path": "device/seedwitness/qr.py",
+        "size": 17909,
+        "sha256": "091f0d6adff8d9f3dfe44197830b2cb4bbf09fac68c7f4f7e4dd81e41e281172"
+      },
+      {
+        "path": "device/seedwitness/ui/__init__.py",
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "device/seedwitness/ui/app.py",
+        "size": 36873,
+        "sha256": "3efa5a2173cf996ae5dea53d58a7b2e60c191a171ca2f8a4aca733fcabaad0e3"
+      },
+      {
+        "path": "device/seedwitness/ui/canvas.py",
+        "size": 17897,
+        "sha256": "bd1269984dff31cd4eff042275fbff294d6524aa1aeabddad3680ca0edbf5641"
+      },
+      {
+        "path": "device/seedwitness/ui/flow_accounts.py",
+        "size": 19935,
+        "sha256": "81cbc844fcb4cc467703d1527ef5233fa23cb704d1789aea2a3611a4e6dd5fac"
+      },
+      {
+        "path": "device/seedwitness/ui/flow_address.py",
+        "size": 63150,
+        "sha256": "8cfe6d6e308a25758ec6ecdf55d01c1c13ee7c62e3c0e4de243b8629e0db6d91"
+      },
+      {
+        "path": "device/seedwitness/ui/flow_generate.py",
+        "size": 37917,
+        "sha256": "92bc9e615058a7f45f9edbf46387512a40190d512b2f2375fcd53e173cc53bd3"
+      },
+      {
+        "path": "device/seedwitness/ui/flow_info.py",
+        "size": 16502,
+        "sha256": "6ac6fc3f501910f02a5889c83a45f8decb88e3aa2e4d5f0789a7560c99fc6611"
+      },
+      {
+        "path": "device/seedwitness/ui/flow_verify.py",
+        "size": 17834,
+        "sha256": "053311c79037c273c31195f56805e2177dea4086598ea01323daf371ae72ce36"
+      },
+      {
+        "path": "device/seedwitness/ui/fonts/__init__.py",
+        "size": 6050,
+        "sha256": "55db422314e19b1108a4d8da5e8b495bef43db5f71d6f4d913d4ca09314b0d04"
+      },
+      {
+        "path": "device/seedwitness/ui/fonts/spleen_12x24.py",
+        "size": 18373,
+        "sha256": "e7f78fc4885a5b7aa865faffe4075326add54eeaab46209f1f85ce989599bc53"
+      },
+      {
+        "path": "device/seedwitness/ui/fonts/spleen_16x32.py",
+        "size": 11344,
+        "sha256": "3bca3a270a95b8caea5b5c6b6e8204997d514f2d9f164e47f02b8edb5407700f"
+      },
+      {
+        "path": "device/seedwitness/ui/fonts/spleen_8x16.py",
+        "size": 8795,
+        "sha256": "5438d465b7202f75c808b4c40fa212e8eafa5aa6dd861e7881c5266dd8e2ace2"
+      },
+      {
+        "path": "device/seedwitness/ui/screens.py",
+        "size": 41042,
+        "sha256": "8ef34b2c57d954e0082cfd1a81590fe2f8f744a72fecb7ca91c35a4bb03794d0"
+      },
+      {
+        "path": "device/seedwitness/ui/theme.py",
+        "size": 6835,
+        "sha256": "bce5a85a32c0b8d7ea1b867ec45d6af6c3baf9e1a5778a31540dc4c1eaf37109"
+      },
+      {
+        "path": "tools/build_mpy.sh",
+        "size": 12840,
+        "sha256": "13e81cf17d56b50b854d15d0719d02692cc14df98688fc62ac600f76804b05d1"
+      }
+    ]
+  },
+  "generated_utc": "2026-08-05T12:44:20Z",
+  "toolchain": {
+    "python": "3.12.3",
+    "platform": "linux",
+    "mpy_cross_banner": "MicroPython v1.27.0 on 2025-12-13; mpy-cross emitting mpy v6.3",
+    "mpy_cross_package": "1.27.0.post2"
+  }
+}

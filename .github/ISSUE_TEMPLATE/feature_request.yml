@@ -1,0 +1,43 @@
+name: Feature proposal
+description: Propose a focused change to SeedWitness
+title: "[Proposal]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        SeedWitness deliberately has a narrow scope. Explain the user problem first, including any new trust, privacy, recovery, or hardware assumptions. Never include real wallet material.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched the existing issues and documentation for this proposal.
+          required: true
+        - label: I removed all real wallet material and other sensitive data.
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What cannot a user safely do today, and who needs it?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Describe the smallest change that addresses the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: tradeoffs
+    attributes:
+      label: Security and design trade-offs
+      description: Consider secrets, metadata, offline operation, verification, failure modes, recovery, memory, performance, and compatibility.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Include ways to solve the problem without expanding the device's scope.

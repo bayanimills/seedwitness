@@ -1,0 +1,40 @@
+name: Support request
+description: Ask about installation, verification, or use
+title: "[Support]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Support is best effort. Never include a real seed phrase, passphrase, private key, roll sequence, descriptor, or xpub. For vulnerabilities, follow SECURITY.md instead of filing a public issue.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I read SUPPORT.md and the relevant README section.
+          required: true
+        - label: I searched the existing issues.
+          required: true
+        - label: I removed all real wallet material and other sensitive data.
+          required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: What are you trying to do, and where are you blocked?
+    validations:
+      required: true
+  - type: textarea
+    id: attempted
+    attributes:
+      label: What have you tried?
+      description: Include exact commands and sanitized output where useful.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include the SeedWitness commit or release, CYD board revision, MicroPython version, host operating system, and serial-port tooling where relevant.
+    validations:
+      required: true

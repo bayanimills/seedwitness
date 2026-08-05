@@ -1,0 +1,17 @@
+# The manifest hashes source bytes and the deploy build must not depend on a
+# contributor's Git autocrlf setting. Keep reviewable source and docs as LF.
+* text=auto
+*.html text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+*.txt text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+CNAME text eol=lf
+
+*.bin binary
+*.jpg binary
+*.png binary
+*.xz binary
