@@ -1,8 +1,8 @@
 # Contributing to SeedWitness
 
-Thank you for helping improve SeedWitness. This project handles material that
-can control Bitcoin, so correctness and clear failure modes matter more than
-feature count or speed of change.
+Thank you for helping improve SeedWitness. The project tests deterministic
+Bitcoin seed derivation, so correctness, reproducibility and clear scope
+matter more than feature count or speed of change.
 
 ## Before you start
 
@@ -10,9 +10,9 @@ feature count or speed of change.
 - For a substantial feature or user-flow change, open an issue first so the
   security and hardware trade-offs can be discussed before implementation.
 - Never post a real seed phrase, BIP39 passphrase, private key, roll sequence,
-  wallet descriptor, or other wallet material. Use published test vectors or
-  clearly disposable test data only. Account xpubs do not enable spending, but
-  they are still sensitive financial metadata and should not be posted.
+  wallet descriptor, or other wallet material. Use test data expected to
+  control no real-world value. Account xpubs do not enable spending, but they
+  are still sensitive financial metadata and should not be posted.
 - Do not report a vulnerability in a public issue. Follow the instructions in
   [SECURITY.md](SECURITY.md).
 
@@ -75,7 +75,7 @@ artifact. Hardware deployment and verification are documented in the
 
 In the pull request, include:
 
-1. the problem and why the change is the smallest safe solution;
+1. the problem and why the change is the smallest correct solution;
 2. security, privacy, compatibility, and recovery implications;
 3. the exact tests and hardware checks run; and
 4. screenshots for visible UI changes, with no wallet material in them.

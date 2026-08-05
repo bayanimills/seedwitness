@@ -6,10 +6,13 @@ vulnerabilities belong in the relevant commit, release notes, or a published
 GitHub Security Advisory, where affected versions and the fix can be stated
 accurately.
 
-SeedWitness handles material from which Bitcoin private keys are derived. Treat
-an unexplained derivation result, unexpected persistence of secret material, or
-failure of a verification control as a security issue even if no funds are
-known to be at risk.
+SeedWitness is intended for reproducible tests using data expected to control
+no real-world value. It is not intended to process a live wallet backup or
+generate a wallet that will be funded. It cannot distinguish test material
+from live wallet material.
+
+Treat an unexplained derivation result, unexpected persistence of entered
+material, or failure of a verification control as a security issue.
 
 ## Supported versions
 
@@ -18,10 +21,10 @@ known to be at risk.
 | `0.1.0` | Supported |
 | Untagged commits, locally modified builds, and mismatched manifests | Not supported |
 
-A manifest describes one exact build. A fix on `main` does not make an older
-device build safe, and a passing manifest from one commit says nothing about a
-different commit. Support applies only to the exact source and manifest named
-in the table.
+A manifest describes one exact build. A fix on `main` does not change an older
+device, and a passing manifest from one commit says nothing about a different
+commit. Support applies only to the exact source and manifest named in the
+table.
 
 ## Reporting a vulnerability
 
@@ -57,21 +60,24 @@ credit.
 
 ### In scope
 
-SeedWitness is intended to catch a buggy or compromised primary wallet showing
-the wrong receive address. It independently reconstructs a seed or derives a
-receive address so the user can compare the result by eye.
+SeedWitness is intended to compare deterministic results from test entropy.
+Enter the same input into SeedWitness and another device or implementation
+following the same SHA-256-to-BIP39 procedure, use the same settings, and
+compare the resulting words and addresses.
 
-For generation, the user's physical rolls are the only entropy input. The
-roll-to-seed calculation is deterministic so the same rolls can be reproduced
-with another implementation. That reproducibility, plus inspection and
-external verification of the installed code, is the trust model.
+The physical input is the only entropy input. Reproducibility, source
+inspection and external build verification are the project model.
 
 ### Out of scope
 
-SeedWitness does not sign transactions, construct PSBTs, protect against
-observation of the screen or dice, judge whether the physical rolls were fair
-or private, resist a malicious chip, or remain secure after an attacker gains
-physical or debug access to the board.
+SeedWitness is not intended to accept a live wallet seed or passphrase, check a
+wallet backup controlling real-world value, generate a wallet that will be
+funded, or store an xpub connected to real financial activity.
+
+It does not sign transactions, construct PSBTs, protect against observation of
+the screen or dice, judge whether the physical rolls were fair or private,
+resist a malicious chip, or remain secure after an attacker gains physical or
+debug access to the board.
 
 "Offline" describes how the owner must operate the device. It is not a
 hardware-enforced air gap.
@@ -85,9 +91,7 @@ hardware.
 
 The stock MicroPython USB REPL is enabled. A computer connected over USB can
 inspect memory and the filesystem, including secret material held during an
-active session and enrolled account records. Power the board from a simple
-power bank or non-networked power supply during a real ceremony, never from a
-computer or an untrusted/networked charger.
+active session and enrolled account records.
 
 Secure boot, flash encryption, JTAG lock, and UART download lock are not
 enabled. The CYD has no secure element or tamper evidence. Anyone with physical
@@ -101,6 +105,9 @@ them, but they are not removed, fuse-disabled, or disabled by a custom
 MicroPython build. Keeping the device offline therefore depends on operational
 isolation and on the installed code being the code that was reviewed.
 
+Physical antenna or radio removal is unsupported, may damage the board and may
+not eliminate all RF emissions.
+
 ### Session secrets are dropped, not securely erased
 
 During a ceremony the roll list, mnemonic, passphrase, PBKDF2 intermediates,
@@ -109,9 +116,8 @@ sleeping, and the handled-crash path drop the application's live references,
 but immutable Python objects are not overwritten and normal session end does
 not reboot the board. Garbage collection is not secure zeroisation.
 
-Power the device off when a ceremony is complete. Do not leave a powered board
-unattended and do not treat a return to the home screen as proof that RAM
-remnants are unrecoverable.
+Do not treat a return to the home screen as proof that RAM remnants are
+unrecoverable.
 
 The application is not designed to persist a mnemonic or private key to flash.
 Enrolment persists an account xpub and address marks in plain, unauthenticated
@@ -140,8 +146,8 @@ measured false-positive bounds are documented in
 The current UI can generate an ASCII Diceware BIP39 passphrase from the EFF
 wordlist. It cannot type or import an existing arbitrary BIP39 passphrase.
 MicroPython lacks the Unicode NFKD support required to safely accept general
-text. Do not interpret a mismatch derived without the exact existing
-passphrase as evidence that a backup is wrong.
+text. Passphrase comparisons must use the exact same test passphrase in both
+implementations.
 
 ### SeedSigner is not an independent address-derivation check
 
@@ -195,20 +201,6 @@ represented as continuously enforced CI.
 There is no secure element, shielding, constant-time guarantee, or claimed
 resistance to power, timing, electromagnetic, or fault-injection attacks. Seed
 words and generated passphrases are intentionally displayed in clear text.
-Use the device in a private physical environment.
-
-## Minimum verification before real use
-
-1. Review the exact commit and its manifest.
-2. Obtain the stock MicroPython image from its official source.
-3. Run `tools/verify_device.py` with `littlefs-python` installed and resolve
-   every result other than `PASS` before entering secret material.
-4. Reproduce the exact rolls or words with an unrelated offline
-   implementation and compare a receive address, not only an account-key
-   encoding or an on-device fingerprint.
-5. Compare the displayed address with the primary wallet before receiving
-   funds.
-6. End the session and power the SeedWitness off.
 
 ## Policy maintenance
 
