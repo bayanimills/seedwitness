@@ -108,8 +108,12 @@ def file_sha256(path):
             h.update(b)
     finally:
         f.close()
-    # No .hex() on MicroPython bytes; build it rather than import ubinascii
-    # for one call.
+    # Built by hand rather than importing ubinascii for one call. NOT because
+    # .hex() is missing: it exists on this port, verified on the board
+    # (bytes(range(4)).hex() -> "00010203"). The comment here used to claim
+    # otherwise, which contradicted flow_generate.py's use of .hex() on the
+    # same firmware and would have sent the next reader looking for a bug
+    # that is not there.
     return "".join("%02x" % b for b in h.digest())
 
 

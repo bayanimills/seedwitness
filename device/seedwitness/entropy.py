@@ -21,7 +21,8 @@ import hashlib
 
 class RollSource:
     def __init__(self, name, sides, action, faces=None, unit="Roll",
-                 prompt="tap the value you rolled:", use_pips=False):
+                 prompt="tap the value you rolled:", use_pips=False,
+                 gerund="Rolling"):
         self.name = name
         self.sides = sides  # number of faces; coin = 2
         # A coin is flipped, not rolled, and lands on a side rather than
@@ -29,6 +30,11 @@ class RollSource:
         # free of per-source special cases.
         self.unit = unit
         self.prompt = prompt
+        # Spelled out rather than derived from `unit`, because English doubles
+        # the consonant for Flip -> Flipping but not for Roll -> Rolling. A
+        # rule clever enough to get both right is a rule that will get the
+        # next source wrong.
+        self.gerund = gerund
         # What the user is told to do, said in full on the entry screen. The
         # word "fair" is doing real work: this device cannot detect a biased
         # die or a trick coin, and the security of the whole seed rests on the
@@ -68,7 +74,8 @@ D12 = RollSource("D12", 12, "Roll Fair D12")
 # 1=heads, 2=tails -- the encoding stays numeric so the hash input is
 # unchanged; only what the user sees differs.
 COIN = RollSource("Coin", 2, "Flip Fair Coin", faces=("Heads", "Tails"),
-                  unit="Flip", prompt="tap the side it landed on:")
+                  unit="Flip", prompt="tap the side it landed on:",
+                  gerund="Flipping")
 
 SOURCES = {"D6": D6, "D8": D8, "D12": D12, "COIN": COIN}
 
@@ -266,6 +273,20 @@ def _plural_unit(source):
     """Lower-case plural of the source's unit: rolls, or flips for a coin.
     The messages here are sentences shown to a person, not UI labels."""
     return source.unit.lower() + "s"
+
+
+def plural_unit_title(source):
+    """Title-case plural for UI labels: "Rolls", or "Flips" for a coin.
+
+    Sliced by hand rather than with str.capitalize(), which DOES NOT EXIST in
+    MicroPython. This is not a style preference: three screens called
+    .capitalize() and every one of them raised AttributeError on the board
+    while all 624 desktop tests passed, because CPython has the method. The
+    board caught it, the suite could not, which is the exact gap PLAN.md
+    section 7 and SECURITY.md R5 describe.
+    """
+    unit = _plural_unit(source)
+    return unit[:1].upper() + unit[1:]
 
 
 def _face_counts(source, rolls):

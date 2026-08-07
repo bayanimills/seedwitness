@@ -931,15 +931,15 @@ class CrashScreen(Screen):
         y = HEADER_H + 14
         for line in th.wrap_text(
                 "Something went wrong and this ceremony has stopped. Any "
-                "seed in memory has been cleared. Nothing was written to "
-                "flash." if self.cleared else
+                "seed in memory has been dropped. No secret was written "
+                "to flash." if self.cleared else
                 "Something went wrong and this ceremony has stopped. The seed "
                 "could NOT be cleared from memory. Power the device off now.",
                 (th.WIDTH - 2 * MARGIN) // fonts.S.width):
             canvas.text(MARGIN, y, line, th.WARN, font=fonts.S)
             y += 20
         y += 8
-        canvas.text(MARGIN, y, "Start over from the beginning.", th.FG,
+        canvas.text(MARGIN, y, "Start over from the beginning", th.FG,
                     font=fonts.S)
         y += 30
         for line in th.wrap_text(self.text, (th.WIDTH - 2 * MARGIN) // th.CHAR_W):
