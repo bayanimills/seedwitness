@@ -91,13 +91,54 @@ def _read_raw(path=None):
 
 def load(path=None):
     """Every enrolled account. Records missing required fields are dropped
-    rather than returned half-built, so callers never have to guard."""
+    rather than returned half-built, so callers never have to guard.
+
+    The TYPES are checked, not just the keys. This file is unauthenticated
+    data read back from flash, and a present-but-wrong-typed field is exactly
+    as damaging as a missing one: {"xpub": 5} passed the old key-only check,
+    then raised AttributeError inside AccountListScreen.draw() when
+    xpub_fingerprint called .encode() on an int. Because that crash happens in
+    draw(), it repeated on every entry to Accounts, so the damaged record
+    could never be reached to DELETE it. An enrolled xpub the user cannot
+    remove is the permanent privacy exposure MAX_ACCOUNTS exists to prevent,
+    with the consent removed.
+
+    Dropped records are purged by the next save(), the same policy the
+    missing-field case already had.
+    """
     out = []
     for rec in _read_raw(path):
         if not isinstance(rec, dict):
             continue
-        if "xpub" in rec and "bip" in rec:
-            out.append(rec)
+        if not isinstance(rec.get("xpub"), str):
+            continue
+        if not isinstance(rec.get("bip"), int) or isinstance(rec.get("bip"), bool):
+            continue
+        # `account` may legitimately be absent: flow_accounts routes that to
+        # DamagedAccountScreen rather than inventing a path. Present-but-wrong
+        # must not outrank absent, so a bad value is dropped to that same path.
+        #
+        # bool is excluded for the same reason it is on `bip`: True is an int
+        # in Python, and it rendered as "m/84h/0h/1h". Negative is excluded
+        # because it rendered "m/84h/0h/-1h". Derivation reads the xpub and
+        # ignores this field, so a bad value does not produce a wrong address,
+        # it produces a wrong PATH LINE, on the one line the user is told is
+        # their check that they are looking at the right wallet.
+        acc = rec.get("account")
+        if "account" in rec and (not isinstance(acc, int)
+                                 or isinstance(acc, bool) or acc < 0):
+            del rec["account"]
+        # `label` is the field this check originally missed, and missing it
+        # recreated the exact crash the type validation was added to stop:
+        # AccountListScreen does `rec.get("label") or "account"`, so any TRUTHY
+        # non-string flows into the row button and is sliced by canvas.text.
+        # {"label": 5} raises TypeError and {"label": {...}} raises KeyError,
+        # both inside draw(), so they repeat on every entry to Accounts and the
+        # record can never be reached to delete. Falsy wrong types (0, null,
+        # false) were harmless only by luck, via the `or` fallback.
+        if "label" in rec and not isinstance(rec["label"], str):
+            del rec["label"]
+        out.append(rec)
     return out
 
 

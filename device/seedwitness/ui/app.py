@@ -217,7 +217,15 @@ def _splash_frame(canvas):
     segs = None
     try:
         segs = _read_wordmark(WORDMARK_FILE)
-    except (OSError, ValueError):
+    except (OSError, ValueError, IndexError):
+        # IndexError belongs here: _read_wordmark indexes the bytes it reads
+        # without length-checking them, so a wordmark.bin truncated at the
+        # wrong byte (b"SWM1", b"SWM1\x01", b"SWM1\x02\xff\xff") raises
+        # IndexError rather than ValueError. This runs on the BOOT path,
+        # before any crash containment exists, so an uncaught one unwinds out
+        # of run_on_hardware() and leaves a lit panel, a dead app and a live
+        # REPL, which is this project's worst named failure mode. The splash
+        # is decoration: never let it stop the device from starting.
         pass
     if segs and sum(s[0] for s in segs[:2]) <= canvas.width:
         logo = segs[:2]

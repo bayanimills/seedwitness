@@ -244,6 +244,36 @@ class AccountListScreen(Screen):
         if template is None:
             app.push(DamagedAccountScreen())
             return
+        # The xpub's CONTENT, not just its type. A well-formed string that is
+        # not a valid extended key opened this screen happily and then raised
+        # ValueError out of HDKey.from_base58 the moment the user asked to
+        # derive, ending the session on the crash screen. This screen already
+        # refuses an unknown bip and a missing account for the same reason:
+        # a damaged record on unauthenticated flash is a thing that happens,
+        # and DamagedAccountScreen exists to say so calmly.
+        #
+        # Checked here rather than in accounts.load() on purpose, and the cost
+        # is bigger than "one hash": measured on the board, this import pulls
+        # embit.base58 -> hashes -> util -> secp256k1 and costs 26,816 bytes,
+        # because the ripemd160 shim falls through to the pure-Python EC
+        # chain. That is affordable HERE (the same chain loads seconds later
+        # at Derive anyway, and the xpub path pays no PBKDF2 stretch, so
+        # nothing is competing for headroom) and would not be affordable in
+        # load(), which runs on the home screen's path.
+        #
+        # The import sits OUTSIDE the try. A MemoryError or ImportError is the
+        # device running out of room, not the record being damaged, and
+        # reporting it as damage tells the user to delete a perfectly good
+        # account to fix a transient. Only decode_check's ValueError means
+        # "this data is bad".
+        from embit import base58
+        try:
+            valid = len(base58.decode_check(rec["xpub"])) == 78
+        except ValueError:
+            valid = False
+        if not valid:
+            app.push(DamagedAccountScreen())
+            return
         screen = flow_screen("address", "AddressIndexScreen")(
             None, template, xpub=rec["xpub"])
         if "account" not in rec:
@@ -358,6 +388,14 @@ class AccountDeleteScreen(Screen):
     because a user who believes deletion is dangerous will keep records they
     meant to remove -- and every kept xpub is a standing privacy exposure.
     """
+
+    # Menu-grade dwell. EntropyCapturedScreen already records why: an amber
+    # button that commits on a plain tap teaches that SOME amber buttons
+    # commit instantly, which is the wrong lesson on a device where the roll
+    # grid's hold is load-bearing. Diagnostics gives even Acknowledge a dwell
+    # because it changes persistent state, and this button destroys a stored record.
+    SWEEP_MS = 170
+    SWEEP_STEPS = 8
 
     def __init__(self, rec):
         self.rec = rec
