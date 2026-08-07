@@ -2,7 +2,7 @@
   "schema": "seedwitness-manifest/1",
   "deploy": {
     "note": "files as they land on the board, paths relative to /",
-    "digest": "f60055efb7a0b24cc4804a75745abd6ea25f7cbe0e8f796521c643e3826b2d6a",
+    "digest": "25a46ef910013fc020e517ea6069de024a95c665df6b9cd223428fb58a6e1c9c",
     "files": [
       {
         "path": "bip39_words.bin",
@@ -176,13 +176,13 @@
       },
       {
         "path": "seedwitness/accounts.mpy",
-        "size": 1120,
-        "sha256": "e5878cd34f7303e8c59c8594e09cab18702f82c692e7f61ac963549a8516d2e6"
+        "size": 1240,
+        "sha256": "7609cf020a785ba0d90116cda66c40d80d613665bafa6a0fd83d9dc121257247"
       },
       {
         "path": "seedwitness/attest.mpy",
-        "size": 1218,
-        "sha256": "11132741c44ee83a0d913dbc0221759da3b6b0e3d03968319893fcb246a56404"
+        "size": 1219,
+        "sha256": "06d493bd261f55bdda5223a350a43b2b178363f895b7e8f6b9fb47c850e117df"
       },
       {
         "path": "seedwitness/compat.mpy",
@@ -221,8 +221,8 @@
       },
       {
         "path": "seedwitness/entropy.mpy",
-        "size": 4552,
-        "sha256": "0c8b866e0d056e47accab034a6741915e3d3b235c40a79e5012eae9e97bf4621"
+        "size": 4654,
+        "sha256": "c7a84c085bff4fa9bd98c19b39f0742cae3b1e7960226e9d66d75c6f3d2265bd"
       },
       {
         "path": "seedwitness/mnemonic.mpy",
@@ -246,8 +246,8 @@
       },
       {
         "path": "seedwitness/ui/app.mpy",
-        "size": 4886,
-        "sha256": "5332f7f17e2b5ad5c2a014b25c0f822d5f2360d359c29d74e5667416126f9c77"
+        "size": 4891,
+        "sha256": "0008e9c5c0a4e34d16d21c12e666058a6701884efe2c0f2f7ba42e09133b39eb"
       },
       {
         "path": "seedwitness/ui/canvas.mpy",
@@ -256,18 +256,18 @@
       },
       {
         "path": "seedwitness/ui/flow_accounts.mpy",
-        "size": 5671,
-        "sha256": "7c4cde94e2d032ccfbc6586431351b5906f3b729546a3b93c11913252b5e9d5d"
+        "size": 5786,
+        "sha256": "886b145ccb42eb4c8f20205d1ab267d0da61a3204c38d717af851214b6a951ce"
       },
       {
         "path": "seedwitness/ui/flow_address.mpy",
-        "size": 13660,
-        "sha256": "e27477d687b5c3c227c5f787359ca576714286ffb89e3f199e063c73e3dd4d97"
+        "size": 14321,
+        "sha256": "1efec8eff5b15c9e09334020333fb90412cf4f89f78b9bef718be29f5ab8f443"
       },
       {
         "path": "seedwitness/ui/flow_generate.mpy",
-        "size": 10238,
-        "sha256": "c5ae73f1b7ee439bd1adf0de195bbee6cbed5fc8f33b4a1186b06f9aba74b27b"
+        "size": 10433,
+        "sha256": "5c58880ee9a4d39a772130747af733f6059f36c319911a0f10b39a07257b9ab4"
       },
       {
         "path": "seedwitness/ui/flow_info.mpy",
@@ -276,8 +276,8 @@
       },
       {
         "path": "seedwitness/ui/flow_verify.mpy",
-        "size": 4870,
-        "sha256": "451ef271c49e9b8a5e67435922cfac3e58f4a2157cd10de5ee9f3c004dc47358"
+        "size": 4867,
+        "sha256": "1d1dd1135f25e6c9333dbf15511d12477b7536eb91e720b56f7d808538826f22"
       },
       {
         "path": "seedwitness/ui/fonts/__init__.mpy",
@@ -301,8 +301,8 @@
       },
       {
         "path": "seedwitness/ui/screens.mpy",
-        "size": 8692,
-        "sha256": "3edf1f6d9a4be2934103be70dc91c7535c2f757e4049a19b82c4a84f0edbea81"
+        "size": 8693,
+        "sha256": "cccb3e188e6c36d89183a8c45dc6f220a80860d820cfde289dfdfc7cd53eb6ae"
       },
       {
         "path": "seedwitness/ui/theme.mpy",
@@ -322,7 +322,7 @@
       "device",
       "tools/build_mpy.sh"
     ],
-    "digest": "b3b737d1a72660961734524b471d58cec70b187dc64509999714b30675d9c2a5",
+    "digest": "46534df5c479809b9b687d953622bced86f14b03b585cd6921b0bca20a7446e5",
     "files": [
       {
         "path": "device/data/eff_large_wordlist.txt",
@@ -521,13 +521,13 @@
       },
       {
         "path": "device/seedwitness/accounts.py",
-        "size": 7787,
-        "sha256": "d777e5cea7d86a5561c95d1e78326323f3abc6b22396e7d1cb5e38fa77b562ee"
+        "size": 10256,
+        "sha256": "c3d3de906c6d1a989deeb187534ad618810480038cc2cf42216ccdc8c40ac1cb"
       },
       {
         "path": "device/seedwitness/attest.py",
-        "size": 5894,
-        "sha256": "438020c7eaaaf49e2ec665293c305cc985a20ac3c86e6c8ec8eb530086d1e3d4"
+        "size": 6198,
+        "sha256": "c4d9805f23b300a177058974b8c64f02a235e7dd5a147940c9310fe092fcb0ee"
       },
       {
         "path": "device/seedwitness/compat.py",
@@ -566,8 +566,8 @@
       },
       {
         "path": "device/seedwitness/entropy.py",
-        "size": 22189,
-        "sha256": "f43eebdc858a0eb225276869b16609b65689356002da3b1cf15edafb7de13e55"
+        "size": 23149,
+        "sha256": "5d51e7f7ed3aae0960a05fd705c4db8bed4c11d83671ea55961abea46e34d62f"
       },
       {
         "path": "device/seedwitness/mnemonic.py",
@@ -591,8 +591,8 @@
       },
       {
         "path": "device/seedwitness/ui/app.py",
-        "size": 36873,
-        "sha256": "3efa5a2173cf996ae5dea53d58a7b2e60c191a171ca2f8a4aca733fcabaad0e3"
+        "size": 37483,
+        "sha256": "513ec50344d1c2218aeb9a76cd110fc232af07d7522730e3c58891af061649ae"
       },
       {
         "path": "device/seedwitness/ui/canvas.py",
@@ -601,18 +601,18 @@
       },
       {
         "path": "device/seedwitness/ui/flow_accounts.py",
-        "size": 19935,
-        "sha256": "81cbc844fcb4cc467703d1527ef5233fa23cb704d1789aea2a3611a4e6dd5fac"
+        "size": 22076,
+        "sha256": "0b610a9bd97f376c99efbf88e866d006cce41e72b89ad2f1e0d5e45e946693e6"
       },
       {
         "path": "device/seedwitness/ui/flow_address.py",
-        "size": 63150,
-        "sha256": "8cfe6d6e308a25758ec6ecdf55d01c1c13ee7c62e3c0e4de243b8629e0db6d91"
+        "size": 68808,
+        "sha256": "3c2c3509c6e353d9e67b6f807dd92f678a72ed2a1e7d1b0e9a0f5965f8699039"
       },
       {
         "path": "device/seedwitness/ui/flow_generate.py",
-        "size": 37917,
-        "sha256": "92bc9e615058a7f45f9edbf46387512a40190d512b2f2375fcd53e173cc53bd3"
+        "size": 38636,
+        "sha256": "b15cfcf4d392d5f9bdfeeab82d61b68db60692b34e7c7408bee8542b0898a76c"
       },
       {
         "path": "device/seedwitness/ui/flow_info.py",
@@ -621,8 +621,8 @@
       },
       {
         "path": "device/seedwitness/ui/flow_verify.py",
-        "size": 17834,
-        "sha256": "053311c79037c273c31195f56805e2177dea4086598ea01323daf371ae72ce36"
+        "size": 18057,
+        "sha256": "748d1e80e690de565aa903881a023c3a3fe05207a7451b480ce4091ca69aeb26"
       },
       {
         "path": "device/seedwitness/ui/fonts/__init__.py",
@@ -646,8 +646,8 @@
       },
       {
         "path": "device/seedwitness/ui/screens.py",
-        "size": 41042,
-        "sha256": "8ef34b2c57d954e0082cfd1a81590fe2f8f744a72fecb7ca91c35a4bb03794d0"
+        "size": 41043,
+        "sha256": "827060e5352c45b561438a8cac2e6cdbe17f37e3e3e083181212feac250b4d35"
       },
       {
         "path": "device/seedwitness/ui/theme.py",
@@ -661,10 +661,10 @@
       }
     ]
   },
-  "generated_utc": "2026-08-05T12:44:20Z",
+  "generated_utc": "2026-08-06T22:47:19Z",
   "toolchain": {
-    "python": "3.12.3",
-    "platform": "linux",
+    "python": "3.12.10",
+    "platform": "win32",
     "mpy_cross_banner": "MicroPython v1.27.0 on 2025-12-13; mpy-cross emitting mpy v6.3",
     "mpy_cross_package": "1.27.0.post2"
   }
