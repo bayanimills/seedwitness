@@ -65,8 +65,11 @@ class VerifyEntryScreen(MenuScreen):
 
     def draw(self, app, canvas):
         self._items = self._items_for(app)
+        # back_button(app), not (None): this list is rebuilt every frame,
+        # AFTER App.draw() has already run _sync_back_labels, so a None here
+        # discarded the sync and left "Back" on a pop that ends the session.
         self.buttons = self._build_buttons() + [self._demo_button(),
-                                                self.back_button(None)]
+                                                self.back_button(app)]
         super().draw(app, canvas)
 
 
@@ -274,7 +277,7 @@ class WordEntryScreen(Screen):
         cands = self._candidates()
         if self.prefix and not cands:
             canvas.text(MARGIN, self.CAND_TOP + 6,
-                        "no matches -- backspace to fix", th.WARN)
+                        "no match: backspace to fix", th.WARN)
         elif not self.prefix:
             canvas.text(MARGIN, self.CAND_TOP + 6,
                         "tap letters to spell a word", th.MUTED)

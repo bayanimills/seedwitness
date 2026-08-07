@@ -205,7 +205,8 @@ class RollEntryScreen(Screen):
 
     def draw(self, app, canvas):
         canvas.fill(th.BG)
-        self.header(canvas, "Rolling %s" % self.session.source.name)
+        self.header(canvas, "%s %s" % (self.session.source.gerund,
+                                       self.session.source.name))
         self.back_button(app).draw(canvas)
         if not self.session.rolls:
             self._demo_button().draw(canvas)
@@ -224,7 +225,7 @@ class RollEntryScreen(Screen):
         if fill_w > 0:
             canvas.fill_rect(bar_x + 1, bar_y + 1, fill_w, 4, th.ENTROPY_BAR)
 
-        canvas.text(MARGIN, HEADER_H + 36, "tap the value you rolled:", th.MUTED)
+        canvas.text(MARGIN, HEADER_H + 36, self.session.source.prompt, th.MUTED)
         for b in self.buttons:
             b.draw(canvas)
 
@@ -394,7 +395,8 @@ class EntropyWarningScreen(Screen):
         self.concern = concern
         self.buttons = [
             TapButton(MARGIN, th.HEIGHT - 96, th.WIDTH - 2 * MARGIN, 40,
-                      "Use These Rolls", self._continue),
+                      "Use These %s" % ent.plural_unit_title(session.source),
+                      self._continue),
             TapButton(MARGIN, th.HEIGHT - 48, th.WIDTH - 2 * MARGIN, 40,
                       "Start Over", self._restart),
         ]
@@ -413,7 +415,8 @@ class EntropyWarningScreen(Screen):
 
     def draw(self, app, canvas):
         canvas.fill(th.BG)
-        self.header(canvas, "Check Your Rolls")
+        self.header(canvas, "Check Your %s"
+                    % ent.plural_unit_title(self.session.source))
         y = HEADER_H + 12
         canvas.text(MARGIN, y, "Pattern noticed", th.WARN, font=fonts.M)
         y += 34
@@ -422,9 +425,14 @@ class EntropyWarningScreen(Screen):
             canvas.text(MARGIN, y, line, th.FG, font=fonts.S)
             y += 20
         y += 4
-        for line in th.wrap_text(
-                "This does not prove bad dice. Check how you rolled before continuing.",
-                budget):
+        # Said in the user's own verb. A coin user told to "check how you
+        # rolled" reasonably wonders whether the warning is even about them.
+        caveat = ("This does not prove a bad coin. Check how you flipped "
+                  "before continuing."
+                  if self.session.source is ent.COIN else
+                  "This does not prove bad dice. Check how you rolled "
+                  "before continuing.")
+        for line in th.wrap_text(caveat, budget):
             canvas.text(MARGIN, y, line, th.MUTED, font=fonts.S)
             y += 18
         for b in self.buttons:
@@ -457,7 +465,8 @@ class EntropyCapturedScreen(Screen):
         y = HEADER_H + 12
         for line in (
             "Source: %s" % self.session.source.name,
-            "Rolls used: %d" % len(self.session.rolls),
+            "%s used: %d" % (ent.plural_unit_title(self.session.source),
+                             len(self.session.rolls)),
             "Entropy: %d bits" % (len(self.entropy) * 8),
         ):
             canvas.text(MARGIN, y, line, th.FG, font=fonts.S)
@@ -465,7 +474,8 @@ class EntropyCapturedScreen(Screen):
         y += 8
         # "truncated" stays in the label: a 12-word seed keeps only the first
         # 128 of sha256's 256 bits, and this screen must not imply otherwise
-        canvas.text(MARGIN, y, "sha256(rolls), truncated:", th.MUTED)
+        canvas.text(MARGIN, y, "sha256(%s), truncated:"
+                    % ent._plural_unit(self.session.source), th.MUTED)
         y += 14
         # 16 hex chars per line. The old layout asked for 32-char lines,
         # which is 256px at the 8px font on a 240px screen -- both canvases
@@ -639,7 +649,8 @@ class ChecksumWordScreen(Screen):
 
         y = bar_y + 28
         for line in th.wrap_text(
-            "Checksum = first bits of SHA256(entropy). Catches about 15 of every 16 single-word errors.",
+            "Checksum = first bits of SHA256(entropy). Catches about %d of every %d single-word errors."
+            % (2 ** self.checksum_bits - 1, 2 ** self.checksum_bits),
             (th.WIDTH - 2 * MARGIN) // th.CHAR_W,
         ):
             canvas.text(MARGIN, y, line, th.MUTED)

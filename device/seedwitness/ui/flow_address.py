@@ -184,14 +184,42 @@ class PassphraseWordsScreen(Screen):
     rules a column cannot carry ("lowercase, single spaces") beside it.
     """
 
+    # Menu-grade dwell. EntropyCapturedScreen already records why: an amber
+    # button that commits on a plain tap teaches that SOME amber buttons
+    # commit instantly, which is the wrong lesson on a device where the roll
+    # grid's hold is load-bearing. Diagnostics gives even Acknowledge a dwell
+    # because it changes persistent state, and this button arms a passphrase that silently changes every derivation after it.
+    SWEEP_MS = 170
+    SWEEP_STEPS = 8
+
     def __init__(self, mnemonic, words):
         self.mnemonic = mnemonic
         self.words = words
         self.phrase = pph.to_passphrase(words)
+        # Side by side on ONE row, not stacked: this screen's body is the
+        # passphrase itself plus the transcription rules, and stacking cost
+        # 48px that the longest 10-word phrase needs. Discard sits left, so
+        # the destructive-to-your-work option is not under the thumb that
+        # just tapped through the previous screen.
+        half = (th.WIDTH - 2 * MARGIN - BUTTON_GAP) // 2
         self.buttons = [
-            TapButton(MARGIN, th.HEIGHT - 48, th.WIDTH - 2 * MARGIN, 40,
+            TapButton(MARGIN, th.HEIGHT - 48, half, 40,
+                      "Discard", self._discard),
+            TapButton(MARGIN + half + BUTTON_GAP, th.HEIGHT - 48, half, 40,
                       "Use This", self._use),
         ]
+        harmonise_scale(self.buttons)
+
+    def _discard(self, app):
+        """Back to the length screen with nothing armed.
+
+        app.passphrase is cleared rather than left alone: this screen can be
+        reached again after an earlier Use This, and silently keeping the old
+        one while the user believes they discarded is the failure mode the
+        whole screen exists to avoid.
+        """
+        app.passphrase = ""
+        app.pop()
 
     def _use(self, app):
         """Return to the Address Type screen with the passphrase set.
@@ -335,6 +363,14 @@ class EnrolScreen(Screen):
     told the true half of a misleading sentence.
     """
 
+    # Menu-grade dwell. EntropyCapturedScreen already records why: an amber
+    # button that commits on a plain tap teaches that SOME amber buttons
+    # commit instantly, which is the wrong lesson on a device where the roll
+    # grid's hold is load-bearing. Diagnostics gives even Acknowledge a dwell
+    # because it changes persistent state, and this button is the only action in the app that persists an xpub to flash.
+    SWEEP_MS = 170
+    SWEEP_STEPS = 8
+
     def __init__(self, mnemonic, template):
         self.mnemonic = mnemonic
         self.template = template
@@ -344,6 +380,10 @@ class EnrolScreen(Screen):
         # is escapable within the session -- the Accounts route below lets
         # the user delete a record and come straight back.
         self._refused = False
+        # Set when the flash write fails. Kept separate from _refused: a full
+        # store is a decision the user can act on, a failed write is the
+        # device not doing what it said.
+        self._write_failed = False
         self.buttons = self._action_buttons()
 
     def _action_buttons(self):
@@ -353,6 +393,15 @@ class EnrolScreen(Screen):
             TapButton(MARGIN, th.HEIGHT - 48, th.WIDTH - 2 * MARGIN, 40,
                       "Cancel", lambda app: app.pop()),
         ]
+
+    def handle_tap(self, app, canvas, x, y):
+        # Stash the canvas, then delegate. NOT an interception like
+        # AddressIndexScreen's: this screen has a 170ms dwell, and jumping
+        # straight to the action would throw the hold gate away. super()
+        # still routes the press through _dispatch, so the sweep, the locked
+        # flash and the pre-dispatch collect all still happen.
+        self._canvas = canvas
+        return super().handle_tap(app, canvas, x, y)
 
     def _enrol(self, app):
         if getattr(app, "demo", False):
@@ -378,10 +427,31 @@ class EnrolScreen(Screen):
         # (mnemonic, passphrase), so the un-passed version missed, re-ran the
         # full ~10 minute stretch inside handle_tap with no progress frame,
         # and clobbered the cache on the way out.
+        # ~10s of EC math on this board, run synchronously inside the tap.
+        # Without a frame the panel simply freezes on the locked amber button
+        # and the user cannot tell a working device from a hung one. Every
+        # other multi-second derivation in this app paints one; this was the
+        # exception. A cache hit makes it brief, which is harmless: a frame
+        # that flashes past costs nothing, a missing frame costs trust.
+        canvas = getattr(self, "_canvas", None)
+        if canvas is not None:
+            _enrol_wait_frame(self, canvas)
         _, xpub = drv.account_xpub(self.mnemonic, self.template,
                                    passphrase=getattr(app, "passphrase", ""))
         self._xpub = xpub
-        acct.add(_auto_label(self.template.bip), xpub, self.template.bip)
+        # A write to flash can fail: a full filesystem raises OSError, and it
+        # used to escape this tap handler to the CrashScreen, which clears
+        # the seed cache. The user would lose a derivation they had waited
+        # ten minutes for, to a storage problem, with no statement of what
+        # went wrong. Reads in this module are already fail-soft; writes were
+        # not. Caught, reported, session intact, and the derived key is kept
+        # so Enrol can simply be pressed again after making room.
+        try:
+            acct.add(_auto_label(self.template.bip), xpub, self.template.bip)
+        except OSError:
+            self._write_failed = True
+            return
+        self._write_failed = False
         self.done = drv.xpub_fingerprint(xpub)
         # Nickname offered here, at enrolment, because this is the moment the
         # user still knows which wallet this is. The auto label says only the
@@ -390,8 +460,14 @@ class EnrolScreen(Screen):
         self.buttons = [
             TapButton(MARGIN, th.HEIGHT - 96, th.WIDTH - 2 * MARGIN, 40,
                       "Add Nickname", self._nickname),
+            # "Done", never "Home" or "Back". _sync_back_labels rewrites any
+            # button labelled Back/Home to match stack depth, so this one
+            # rendered as "Back" while still calling reset_to_home(): the
+            # user read "one screen back" and lost the whole session,
+            # including the derivation they had just waited minutes for.
+            # AddressDisplayScreen already carries this exact warning.
             TapButton(MARGIN, th.HEIGHT - 48, th.WIDTH - 2 * MARGIN,
-                      40, "Home", lambda a: a.reset_to_home()),
+                      40, "Done", lambda a: a.reset_to_home()),
         ]
 
     def _nickname(self, app):
@@ -407,6 +483,19 @@ class EnrolScreen(Screen):
         canvas.fill(th.BG)
         self.header(canvas, "Enrol Account")
         y = HEADER_H + 12
+        if self._write_failed:
+            # Said plainly, because the user is entitled to know the device
+            # did not do the thing it was asked to do. The derived key is
+            # still held, so Enrol can be pressed again after making room.
+            for line in th.wrap_text(
+                    "Could not write to this device's storage. Nothing was "
+                    "enrolled. Delete an account to make room, then press "
+                    "Enrol again. Your seed is still loaded.", 28):
+                canvas.text(MARGIN, y, line, th.WARN)
+                y += 13
+            for b in self.buttons:
+                b.draw(canvas)
+            return
         if getattr(app, "demo", False):
             # Refused outright, with the reason, not a disabled-looking
             # button: a demonstration seed is public and identical for
@@ -509,6 +598,23 @@ def _xpub_wait_frame(screen, canvas):
                 th.FG, font=fonts.S)
     canvas.text(MARGIN, HEADER_H + 48, "No seed on this device.",
                 th.GOOD, font=fonts.S)
+    canvas.present()
+
+
+def _enrol_wait_frame(screen, canvas):
+    """Static feedback while the account key for ENROLMENT is derived.
+
+    Deliberately distinct from _account_key_wait_frame, which says "Nothing
+    will be stored." The whole difference between those two adjacent actions
+    is that this one writes to flash, so the frame that precedes it must not
+    borrow the other's reassurance.
+    """
+    canvas.fill(th.BG)
+    screen.header(canvas, "Deriving...")
+    canvas.text(MARGIN, HEADER_H + 24, "Account key from this seed.",
+                th.FG, font=fonts.S)
+    canvas.text(MARGIN, HEADER_H + 48, "It will be saved on this device.",
+                th.WARN, font=fonts.S)
     canvas.present()
 
 
