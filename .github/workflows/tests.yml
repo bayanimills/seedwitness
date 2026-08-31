@@ -31,7 +31,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
       - name: Install test dependencies
-        run: python -m pip install -r requirements.txt
+        run: python -m pip install -r requirements.txt mpy-cross==1.27.0.post2
+      # Eight test files gate on _build_mpy/ existing and silently skip
+      # without it, so 29 tests never actually ran here, attestation and the
+      # wordmark art among them. They only ran for whoever happened to have
+      # built locally. Build first so the suite in CI is the whole suite.
+      - name: Build the deploy tree the tests read
+        run: ./tools/build_mpy.sh
       - name: Run desktop tests
         run: python -m pytest tests/ -q
       # The generator walks the real UI, so it breaks when a screen is added
