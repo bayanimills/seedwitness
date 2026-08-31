@@ -1,0 +1,25 @@
+# Tests allowed to skip. See conftest.py: anything skipping that is not
+# listed here fails the build, and anything listed here that RUNS also
+# fails, because that means the feature landed and its guard should go.
+#
+# Both entries below are specifications for unbuilt features. See PR #4.
+#
+# TouchCheckScreen: skips at module level, so the whole file is the id.
+tests/test_touch_check.py
+#
+# recoverable waits: undo a roll, erase a letter, cancel a derivation,
+# idle sleep with warning, and a brush that must not end the ceremony.
+tests/test_recoverable_waits.py::test_undo_roll_removes_only_the_last_one
+tests/test_recoverable_waits.py::test_undo_on_an_empty_session_is_a_no_op
+tests/test_recoverable_waits.py::test_undone_rolls_leave_no_trace_in_the_entropy
+tests/test_recoverable_waits.py::test_undo_button_appears_only_once_there_is_something_to_undo
+tests/test_recoverable_waits.py::test_undo_is_held_like_every_other_control_on_the_screen
+tests/test_recoverable_waits.py::test_back_holds_once_rolls_exist
+tests/test_recoverable_waits.py::test_back_stays_a_plain_tap_with_nothing_rolled
+tests/test_recoverable_waits.py::test_menus_keep_the_hour
+tests/test_recoverable_waits.py::test_screens_showing_the_seed_time_out_in_minutes
+tests/test_recoverable_waits.py::test_the_warning_can_never_outlast_the_window_it_counts_down
+tests/test_recoverable_waits.py::test_cancel_needs_the_panel_to_be_seen_clear_first
+tests/test_recoverable_waits.py::test_a_held_touch_after_release_cancels
+tests/test_recoverable_waits.py::test_a_touch_released_inside_the_window_is_not_a_cancel
+tests/test_recoverable_waits.py::test_the_erase_key_names_what_it_would_actually_remove

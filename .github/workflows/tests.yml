@@ -8,6 +8,11 @@ on:
 permissions:
   contents: read
 
+# A new push to a branch makes the run already in flight pointless.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -29,6 +34,15 @@ jobs:
         run: python -m pip install -r requirements.txt
       - name: Run desktop tests
         run: python -m pytest tests/ -q
+      # The generator walks the real UI, so it breaks when a screen is added
+      # to a flow and it is not taught about it. It broke exactly that way
+      # once and went unnoticed: it jammed on a new warning screen and wrote
+      # six different screenshots that were all the same screen. Nothing
+      # ran it, so nothing said so. Exit code only, no image diffing:
+      # VerifyBuildScreen renders a hash of the device tree and so changes
+      # on every legitimate code change.
+      - name: Screenshot generator still walks the flow
+        run: python sim/capture_screens.py
 
   release-build:
     name: release build (${{ matrix.platform }})
