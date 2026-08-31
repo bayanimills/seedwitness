@@ -19,6 +19,13 @@ from seedwitness.ui.screens import WordEntryScreen  # noqa: E402
 
 OUT = ROOT / "screenshots"
 OUT.mkdir(exist_ok=True)
+# Clear stale frames before writing. Numbering shifts whenever a screen is
+# added, so leaving the previous run's files behind would keep retired names
+# alive beside the current set and quietly pad the gallery with images no
+# screen draws any more. After a run this directory is exactly what this
+# build of the app renders, nothing more.
+for _stale in OUT.glob("*.png"):
+    _stale.unlink()
 
 canvas = MockCanvas()
 app = App()
@@ -33,10 +40,18 @@ def snap(label):
     print("saved %s  (screen: %s)" % (path.name, type(app.screen).__name__))
 
 
-def tap_button(label_substring):
+def tap_button(label_substring, optional=False):
     """Find and tap the first button on the current screen whose label
     contains the given substring -- robust to layout, matches real usage
-    ("tap the button that says X") rather than hardcoded pixel coordinates."""
+    ("tap the button that says X") rather than hardcoded pixel coordinates.
+
+    A miss raises.  This used to return False and every caller ignored it, so
+    when a new screen appeared mid-flow the walkthrough tapped nothing and
+    kept snapping that screen under the filenames of the screens it never
+    reached.  A tap that does not land is a broken walkthrough: say so at the
+    step that broke, not twenty steps later.  Pass optional=True for the taps
+    that are genuinely conditional.
+    """
     for b in app.screen.buttons:
         # labels may be split across lines to fit a narrow screen, so match
         # against the flattened text rather than the literal label
@@ -44,7 +59,11 @@ def tap_button(label_substring):
         if label_substring.lower() in flat:
             app.handle_tap(canvas, b.x + b.w // 2, b.y + b.h // 2)
             return True
-    return False
+    if optional:
+        return False
+    raise AssertionError("no button matching %r on %s; buttons are %r" % (
+        label_substring, type(app.screen).__name__,
+        [b.label for b in app.screen.buttons]))
 
 
 def tap_roll(value):
@@ -122,6 +141,16 @@ remaining = app.screen.session.target_rolls - len(app.screen.session.rolls)
 rest_rolls = [((i % 6) + 1) for i in range(20, 20 + remaining)]
 for val in rest_rolls:
     tap_roll(val)
+
+# 6b. The fixed 1..6 cycle above is exactly the input the advisory pattern
+# check exists to notice, so the walkthrough meets the warning here. Capture
+# it -- a real user reaches it about once in 645 honest d6 ceremonies, and it
+# had no screenshot -- then clear it the way they would. Tapping through
+# rather than perturbing the rolls keeps the sequence deterministic, so every
+# mnemonic-derived screen below stays byte-identical.
+if type(app.screen).__name__ == "EntropyWarningScreen":
+    snap("entropy_pattern_warning")
+    tap_button("Use These Rolls")
 snap("entropy_captured")
 
 # 7. Reveal words
@@ -172,6 +201,29 @@ tap_button("Continue")  # back to Ceremony Complete
 tap_button("Verify Address")
 snap("derivation_path_select")
 
+# 10a. Optional BIP39 passphrase: length, the roll grid that generates it,
+# and the resulting words with their check value. Generated from dice like
+# the seed, never typed. Discarded again here so the addresses below stay
+# those of the bare mnemonic.
+from seedwitness import passphrase as _pph  # noqa: E402
+
+_pph.WORDS_FILE = str(ROOT / "_build_mpy" / "eff_words.bin")
+if Path(_pph.WORDS_FILE).exists():
+    tap_button("Passphrase")
+    snap("passphrase_length")
+    tap_button("8 words")
+    for _i in range(_pph.rolls_needed(8) - 1):
+        tap_roll((_i % 6) + 1)
+    snap("passphrase_roll")
+    tap_roll(((_pph.rolls_needed(8) - 1) % 6) + 1)   # the last roll commits
+    snap("passphrase_words")
+    tap_button("Discard")
+    tap_button("Back")
+    assert type(app.screen).__name__ == "DerivationPathScreen"
+    assert app.passphrase == "", "passphrase leaked into the walkthrough"
+else:
+    print("skipped passphrase screens: run tools/build_mpy.sh for eff_words.bin")
+
 # 10b. All Types: one PBKDF2 stretch, then every script type, so nobody has
 # to know their wallet's address type before the ten-minute wait. The
 # deriving frame is captured after completion, arrival lines included.
@@ -220,6 +272,13 @@ canvas.save(str(OUT / ("%02d_deriving_progress.png" % next(shot_n))))
 
 snap("address_display")
 
+# 12c. The account-level key behind that address: read-only, stores nothing,
+# and the screen a user reaches when a wallet asks for an xpub rather than an
+# address.
+tap_button("Account Key")
+snap("account_key")
+tap_button("Back")
+
 # 13. Back to home, then into manual verify entry flow
 app.reset_to_home()
 tap_button("Verify")
@@ -244,14 +303,42 @@ app.screen._press_preview(canvas, _k)
 canvas.save(str(OUT / ("%02d_letter_press_preview.png" % next(shot_n))))
 app.screen.draw(app, canvas)
 
+# 13c. A seed that does not checksum. Twelve valid BIP39 words are still
+# almost never a valid seed, so this is the screen a mistyped backup meets.
+app.reset_to_home()
+tap_button("Verify")
+tap_button("Enter seed manually")
+tap_button("12 words")
+for _w in ["abandon"] * 12:
+    type_word(_w)
+snap("invalid_seed")
+
 # 14. About screen
 app.reset_to_home()
 tap_button("About")
 snap("about")
-# help pages are reached by topic, not sequence
-for _label, _name in (("Roll?", "roll"), ("Verify?", "verify"), ("Trust?", "trust")):
-    if tap_button(_label):
-        snap("about_%s" % _name)
+# Every help page, in order. Two of them have a topic button; the rest are
+# reached only by paging, which is why "Compare" and "Trust" had no
+# screenshot at all -- the old loop looked for a "Trust?" button that does
+# not exist and quietly captured nothing.
+from seedwitness.ui.flow_info import AboutScreen as _AboutScreen  # noqa: E402
+
+for _page in range(1, len(_AboutScreen.PAGES)):
+    tap_button("Next")
+    snap("about_%s" % _AboutScreen.PAGES[_page][0].lower().replace(" ", "_"))
+
+# 14b. Verify Build and its diagnostics: the attestation path off the home
+# menu, and the only screens here that read the deploy tree. Skip cleanly on
+# a checkout that has not built one rather than shipping a half-drawn frame.
+app.reset_to_home()
+if (ROOT / "_build_mpy").is_dir():
+    tap_button("Verify Build")
+    snap("verify_build")
+    tap_button("Diagnostics")
+    snap("diagnostics")
+    app.reset_to_home()
+else:
+    print("skipped verify_build/diagnostics: run tools/build_mpy.sh first")
 
 # 15. Confirm Backup -- mismatch path, on a fresh App with one deliberate typo
 from seedwitness.ui.app import App as _App  # noqa: E402
@@ -401,6 +488,20 @@ _d = app.screen._demo_button()
 app.handle_tap(canvas, _d.x + _d.w // 2, _d.y + _d.h // 2)
 tap_button("Start Demo")
 snap("demo_verify_path_select")
+app.reset_to_home()
+
+# 18. The 24-word roll count gate. A 24-word seed needs 100 D6 rolls;
+# SeedSigner's ceremony uses 99, so the device stops at 99 and asks which
+# convention the user wants rather than silently picking one.
+app.reset_to_home()
+tap_button("Roll a Seed")
+tap_button("D6")
+tap_button("24 words")
+for _i in range(99):
+    tap_roll((_i % 6) + 1)
+snap("seedsigner_roll_gate")
+tap_button("Use 99: SeedSigner")
+snap("roll_count_confirm")
 app.reset_to_home()
 
 print("\n%d screenshots written to %s" % (next(shot_n) - 1, OUT))
