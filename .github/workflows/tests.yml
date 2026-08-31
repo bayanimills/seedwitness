@@ -8,6 +8,11 @@ on:
 permissions:
   contents: read
 
+# A new push to a branch makes the run already in flight pointless.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -26,9 +31,24 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
       - name: Install test dependencies
-        run: python -m pip install -r requirements.txt
+        run: python -m pip install -r requirements.txt mpy-cross==1.27.0.post2
+      # Eight test files gate on _build_mpy/ existing and silently skip
+      # without it, so 29 tests never actually ran here, attestation and the
+      # wordmark art among them. They only ran for whoever happened to have
+      # built locally. Build first so the suite in CI is the whole suite.
+      - name: Build the deploy tree the tests read
+        run: ./tools/build_mpy.sh
       - name: Run desktop tests
         run: python -m pytest tests/ -q
+      # The generator walks the real UI, so it breaks when a screen is added
+      # to a flow and it is not taught about it. It broke exactly that way
+      # once and went unnoticed: it jammed on a new warning screen and wrote
+      # six different screenshots that were all the same screen. Nothing
+      # ran it, so nothing said so. Exit code only, no image diffing:
+      # VerifyBuildScreen renders a hash of the device tree and so changes
+      # on every legitimate code change.
+      - name: Screenshot generator still walks the flow
+        run: python sim/capture_screens.py
 
   release-build:
     name: release build (${{ matrix.platform }})
