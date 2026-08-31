@@ -2,10 +2,8 @@
 # listed here fails the build, and anything listed here that RUNS also
 # fails, because that means the feature landed and its guard should go.
 #
-# Both entries below are specifications for unbuilt features. See PR #4.
+# The entry below is a specification for an unbuilt feature.
 #
-# TouchCheckScreen: skips at module level, so the whole file is the id.
-tests/test_touch_check.py
 #
 # recoverable waits: undo a roll, erase a letter, cancel a derivation,
 # idle sleep with warning, and a brush that must not end the ceremony.
